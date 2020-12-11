@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from datetime import date
 from datetime import datetime
 
+# Definición de clase UserInDB con sus atributos
 class UserInDB(BaseModel):
     username:str
     nombres: str
@@ -15,6 +16,7 @@ class UserInDB(BaseModel):
     
 db_users = Dict[str, UserInDB]
 
+# Base de datos ficticia
 db_users = {
     "carlitosmota": UserInDB(**{"username":"carlitosmota",
                                 "nombres":"Carlos",
@@ -66,12 +68,15 @@ db_users = {
 }
 
 def get_user(username: str):
+    """Retorna el usuario buscándolo por su username. En caso de no encontrarlo retorna None"""
     if username in db_users.keys():
         return db_users[username]
     else:
         return None
 
 def delete_user(user: UserInDB):
+    """Busca el usuario en la base de datos y compara su contraseña. En caso de encontrarlo y verificarlo
+    cambia su estado de actividad a inactivo y retorna verdadero. Caso contrario retorna falso"""
     user_in_db = get_user(user.username)
     if user_in_db:
         if user.password == user_in_db.password:
@@ -83,6 +88,7 @@ def delete_user(user: UserInDB):
         return False
 
 def create_user(new_user: UserInDB):
+    """Crea un nuevo usuario con la información que le entra por parámetro"""
     if get_user(new_user.username) == None:
         print("im here")
         db_users[new_user.username] = new_user
