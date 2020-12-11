@@ -10,7 +10,7 @@ class UserInDB(BaseModel):
     email: str
     password:str
     active = bool
-    fecha_registro: str
+    fecha_registro: datetime
     
     
 db_users = Dict[str, UserInDB]
