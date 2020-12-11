@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class UserIn(BaseModel):
@@ -8,5 +9,5 @@ class UserIn(BaseModel):
 class UserOut(BaseModel):
     nombres: str
     apellidos: str
-    fecha_registro: str
-    correo: str
+    fecha_registro: datetime
+    email: str

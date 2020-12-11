@@ -9,7 +9,7 @@ class UserInDB(BaseModel):
     apellidos: str
     email: str
     password:str
-    active = bool
+    active:  bool
     fecha_registro: datetime
     
     
@@ -21,7 +21,7 @@ db_users = {
                                 "apellidos":"Perez Mota",
                                 "email":"capeta01@gmail.com",
                                 "password":"123456",
-                                "active":True,
+                                "active":False,
                                 "fecha_registro":"2012-05-01 05:34:01"}),
 
     "nando_duca": UserInDB(**{"username":"nando_duca",
@@ -71,9 +71,18 @@ def get_user(username: str):
     else:
         return None
 
-def update_user(user_in_db: UserInDB):
-    db_users[user_in_db.username] = user_in_db
-    return user_in_db
+def delete_user(user: UserInDB):
+    user_in_db = get_user(user.username)
+    if user_in_db:
+        if user.password == user_in_db.password:
+            user_in_db.active = False
+            return True
+        else:
+            return False
+    else:
+        return False
 
 def create_user(new_user: UserInDB):
-    db_users[new_user.username] = {UserInDB.nombres, UserInDB.apellidos, UserInDB.email, UserInDB.password, UserInDB.active, UserInDB.fecha_registro}
+    if get_user(new_user.username) == None:
+        print("im here")
+        db_users[new_user.username] = new_user
