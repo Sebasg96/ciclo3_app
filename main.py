@@ -1,6 +1,6 @@
 from db.user_db import UserInDB
 from db.user_db import create_user, get_user
-from models.user_models import UserOut
+from models.user_models import UserOut, UserIn
 import datetime
 from fastapi import FastAPI
 from fastapi import HTTPException
@@ -13,7 +13,7 @@ async def get_user_information(username: str):
     user_in_db = get_user(username)
     if user_in_db == None:
         raise HTTPException(status_code=404, detail="El usuario no existe.")
-    if user_in_db.active == False:
+    if user_in_db.activo == False:
         return {"message": "El usuario ya no se encuentra activo."}
     user_out = UserOut(**user_in_db.dict())
     return user_out
@@ -27,7 +27,7 @@ async def add_user(user: UserInDB):
 
 #Dar de baja un usuario
 @api.put("/user/delete")
-async def unsubscribe_user(username: str):
-    user_in_db = get_user(username)
+async def unsubscribe_user(user: UserIn):
+    user_in_db = get_user(user.username)
     user_in_db.active = False
     return {"message": "El usuario ha sido dado de baja."}
