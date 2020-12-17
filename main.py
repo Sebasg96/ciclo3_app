@@ -29,14 +29,14 @@ async def get_user_information(username: str):
     return user_out
 
 #Crear usuario
-@api.put("/user/create")
+@api.put("/user/create/")
 async def add_user(user: UserInDB):
     create_user(user)
     user_out = UserOut(**user.dict())
     return user_out
 
 #Dar de baja un usuario
-@api.put("/user/delete")
+@api.put("/user/delete/")
 async def unsubscribe_user(user: UserIn):
     if delete_user(user):
         return {"message": "El usuario ha sido dado de baja."}
