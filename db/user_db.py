@@ -90,5 +90,4 @@ def delete_user(user: UserInDB):
 def create_user(new_user: UserInDB):
     """Crea un nuevo usuario con la información que le entra por parámetro"""
     if get_user(new_user.username) == None:
-        print("im here")
         db_users[new_user.username] = new_user
