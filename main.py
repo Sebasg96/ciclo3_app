@@ -22,9 +22,9 @@ allow_credentials=True, allow_methods=["*"], allow_headers=["*"],
 async def get_user_information(username: str):
     user_in_db = get_user(username)
     if user_in_db == None:
-        return{"message": "El usuario no existe."}
+        raise HTTPException(status_code = 404, detail="El usuario no existe.")
     if not user_in_db.active:
-        return {"message": "El usuario ya no se encuentra activo."}
+        raise HTTPException(status_code = 404, detail="El usuario ya no se encuentra activo.")
     user_out = UserOut(**user_in_db.dict())
     return user_out
 
@@ -41,17 +41,17 @@ async def unsubscribe_user(user: UserIn):
     if delete_user(user):
         return {"message": "El usuario ha sido dado de baja."}
     else:
-        return {"message": "El usuario no existe o la contraseña es incorrecta"}
+        raise HTTPException(status_code = 404, detail="El usuario no existe o la contraseña es incorrecta")
 
 #Autenticación del usuario
 @api.post("/user/auth/")
 async def auth_user(user_in: UserIn):
     user_in_db = get_user(user_in.username)
     if user_in_db == None:
-        return {"message": "El usuario no existe"}
+        raise HTTPException(status_code = 404, detail="El usuario no existe")
     if user_in_db.active == False:
-        return {"message": "El usuario se encuentra inactivo"}
+        raise HTTPException(status_code = 404, detail="El usuario se encuentra inactivo")
     if user_in_db.password != user_in.password:
-        return {"message": "La contraseña es incorrecta"}
+        raise HTTPException(status_code = 404, detail="La contraseña es incorrecta")
     else:
         return UserOut(**user_in_db.dict())
